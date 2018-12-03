@@ -398,3 +398,17 @@ func NewIsNullMethod(ctx QsFieldContext) UnaryFilterMethod {
 func NewIsNotNullMethod(ctx QsFieldContext) UnaryFilterMethod {
 	return newUnaryFilterMethod(ctx.WithOperationName("IsNotNull"), "IS NOT NULL")
 }
+
+// NewFindMethod creates Find method
+func NewFindMethod(structName, qsTypeName string) SelectMethod {
+	return newSelectMethod("Find", "Find", fmt.Sprintf("*[]%s", structName), qsTypeName)
+}
+
+// NewOneMethod creates One method
+func NewSingleMethod(structName, qsTypeName string) SelectMethod {
+	r := newSelectMethod("Single", "First", fmt.Sprintf("*%s", structName), qsTypeName)
+	const doc = `// One is used to retrieve one result. It returns gorm.ErrRecordNotFound
+	// if nothing was fetched`
+	r.setDoc(doc)
+	return r
+}

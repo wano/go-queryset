@@ -38,6 +38,34 @@ const qsCode = `
       {{ .GetBody }}
 		}
 	{{ end }}
+		
+		func (qs {{ .Name }}) Find() ([]{{ .StructName  }} , error  ) {
+			s := []{{ .StructName  }}{}
+			
+			err := qs.All(&s)
+			if err != nil {
+				if err == gorm.ErrRecordNotFound {
+					err = nil
+				} else {
+					return nil, err
+				}
+			}
+			return s , nil
+		}
+
+		func (qs {{ .Name }}) Single() ({{ .StructName  }} , error  ) {
+			s := {{ .StructName  }}{}
+			
+			err := qs.One(&s)
+			if err != nil {
+				if err == gorm.ErrRecordNotFound {
+					err = nil
+				} else {
+					return nil, err
+				}
+			}
+			return s , nil
+		}
 
   // ===== END of query set {{ .Name }}
 
